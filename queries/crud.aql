@@ -1,0 +1,16 @@
+// CREATE
+INSERT { _key: "a25", nome: "Zeca Silva", curso: "SI", semestre: 1 } INTO alunos
+
+// CREATE de aresta (amizade nova)
+INSERT { _from: "alunos/a25", _to: "alunos/a01", desde: "2026-10-31" } INTO amizades
+
+// READ
+FOR a IN alunos FILTER a.curso == "SI" RETURN a
+
+// UPDATE
+UPDATE "a25" WITH { semestre: 2 } IN alunos
+
+// DELETE (primeiro as arestas, depois o nó)
+FOR e IN amizades FILTER e._from == "alunos/a25" OR e._to == "alunos/a25" REMOVE e IN amizades
+
+REMOVE "a25" IN alunos
