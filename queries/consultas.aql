@@ -1,0 +1,63 @@
+// ======================================================
+// ISSUE #6: CONSULTAS DO ESTUDO DE CASO (AQL)
+// ======================================================
+
+// 1. Listar todas as disciplinas cursadas pela Ana Souza (alunos/a01)
+FOR v, e IN 1..1 OUTBOUND 'alunos/a01' matriculas
+    RETURN {
+        aluno: "Ana Souza",
+        disciplina: v.nome,
+        professor: v.professor,
+        semestre: e.semestre
+    }
+
+// 2. Listar todos os Amigos diretos da Ana Souza (alunos/a01)
+FOR v IN 1..1 ANY 'alunos/a01' amizades
+    RETURN {
+        amigo: v.nome,
+        curso: v.curso,
+        semestre: v.semestre
+    }
+
+// 3. Descobrir as Disciplinas mais populares (com mais alunos matriculados)
+FOR m IN matriculas
+    COLLECT discId = m._to WITH COUNT INTO totalAlunos
+    LET d = DOCUMENT(discId)
+    SORT totalAlunos DESC
+    RETURN {
+        disciplina: d.nome,
+        professor: d.professor,
+        totalMatriculados: totalAlunos
+    }
+
+// 4. Encontrar Colegas de Turma (Alunos que cursam as mesmas disciplinas que a Ana)
+FOR d IN 1..1 OUTBOUND 'alunos/a01' matriculas
+    FOR colega IN 1..1 INBOUND d._id matriculas
+        FILTER colega._id != 'alunos/a01'
+        RETURN DISTINCT {
+            colega: colega.nome,
+            curso: colega.curso,
+            disciplinaEmComum: d.nome
+        }
+
+// 5. Recomendação de "Amigos de Amigos" (Profundidade de 2 saltos na rede)
+FOR v, e, p IN 2..2 ANY 'alunos/a01' amizades
+    FILTER v._id != 'alunos/a01'
+    RETURN DISTINCT {
+        recomendacao: v.nome,
+        curso: v.curso,
+        semestre: v.semestre
+    }
+
+
+// ======================================================
+// ISSUE #7: RECURSO PONTO FORTE (SHORTEST PATH / MENOR CAMINHO)
+// ======================================================
+// Encontra o menor caminho de amizades ligando Ana Souza (a01) até Yasmin Lopes (a24)
+FOR v, e IN OUTBOUND SHORTEST_PATH
+    'alunos/a01' TO 'alunos/a24'
+    GRAPH 'rede_academica'
+    RETURN {
+        passo: v.nome,
+        curso: v.curso
+    }
