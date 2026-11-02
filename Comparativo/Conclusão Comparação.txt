@@ -1,9 +1,0 @@
-Conclusão: Comparação entre o Modelo Relacional e o Modelo de Grafos
-
-Após a implementação e comparação dos modelos relacional e de grafos para representar a rede social acadêmica, foi possível observar que ambos conseguem armazenar os dados e realizar as consultas propostas. Entretanto, cada modelo apresenta características que o tornam mais adequado para determinadas situações.
-
-O modelo relacional, implementado no PostgreSQL, organiza as informações em tabelas e utiliza chaves primárias e estrangeiras para estabelecer relacionamentos entre os dados. Essa estrutura oferece boa organização, integridade e consistência das informações. As consultas de amizades e de menor caminho também puderam ser reproduzidas utilizando comandos SQL, incluindo junções e consultas recursivas. Porém, operações que envolvem percorrer diversas conexões podem exigir consultas mais complexas.
-
-Já o modelo de grafos, implementado no ArangoDB, representa diretamente os alunos como vértices e suas amizades como arestas. Essa abordagem facilita a visualização e a exploração dos relacionamentos, tornando operações como encontrar amigos e identificar o menor caminho entre dois alunos mais naturais.
-
-Diante dos resultados, concluímos que **o modelo de grafos é o mais adequado para representar a rede social acadêmica**, principalmente porque o foco do sistema está nas conexões e interações entre os alunos. Isso não significa que o modelo relacional seja inadequado, mas que, para esse cenário específico, o modelo de grafos oferece uma representação mais intuitiva e prática dos relacionamentos.
