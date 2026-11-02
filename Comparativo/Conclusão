@@ -1,0 +1,78 @@
+# Comparativo Relacional - Rede Social Acadêmica (PostgreSQL)
+
+Esta pasta contém a implementação do modelo relacional da rede social acadêmica, desenvolvida como parte do comparativo entre bancos de dados relacionais e bancos de dados NoSQL utilizando grafos.
+
+O objetivo foi reproduzir no **PostgreSQL** a estrutura de dados utilizada no ArangoDB, permitindo comparar os dois modelos utilizando as mesmas informações e consultas.
+
+---
+
+## 🗄️ Modelo Relacional
+
+O banco de dados foi implementado no **PostgreSQL**, utilizando quatro tabelas principais:
+
+1. **alunos:** armazena os dados dos alunos, incluindo nome, curso e semestre.
+2. **disciplinas:** armazena os nomes das disciplinas e seus respectivos professores.
+3. **amizades:** representa as conexões entre os alunos, utilizando chaves estrangeiras para identificar a origem e o destino de cada relacionamento.
+4. **matriculas:** relaciona os alunos às disciplinas em que estão matriculados.
+
+As tabelas utilizam chaves primárias e estrangeiras para garantir a integridade dos relacionamentos.
+
+---
+
+## 📊 Carga de Dados
+
+Foram inseridos os mesmos dados utilizados no modelo de grafos, permitindo realizar uma comparação equivalente entre as implementações.
+
+| Elemento | Quantidade |
+|---|---:|
+| Alunos | 24 |
+| Disciplinas | 6 |
+| Amizades | 36 |
+| Matrículas | 60 |
+| **Total** | **126** |
+
+---
+
+## 🔎 Consultas SQL Implementadas
+
+Foram reescritas e testadas duas consultas originalmente desenvolvidas em AQL no ArangoDB.
+
+### Consulta 2 - Amigos diretos de Ana Souza
+
+Lista todos os amigos diretos de Ana Souza, apresentando nome, curso e semestre.
+
+A consulta utiliza `JOIN` para relacionar as tabelas e `UNION` para considerar as amizades nos dois sentidos.
+
+**Resultado:** Bruno Lima, Diego Alves, Marina Teixeira e Sofia Campos.
+
+### Consulta 6 - Menor caminho entre Ana Souza e Yasmin Lopes
+
+Encontra o menor caminho de amizades entre Ana Souza e Yasmin Lopes.
+
+A implementação utiliza uma **CTE recursiva (`WITH RECURSIVE`)** para percorrer as conexões, respeitando a direção das arestas, conforme a consulta original `OUTBOUND SHORTEST_PATH` do ArangoDB.
+
+**Caminho encontrado:**
+
+Ana Souza → Sofia Campos → Thiago Pinto → Wesley Cunha → Yasmin Lopes.
+
+---
+
+## 📸 Evidências
+
+As capturas de tela das consultas executadas e do modelo relacional estão organizadas na pasta `prints_sql/`.
+
+- `consulta2_sql.png`: execução da consulta de amigos diretos.
+- `consulta6_sql.png`: execução da consulta de menor caminho.
+- `diagrama_er.png`: representação do modelo relacional e seus relacionamentos.
+
+---
+
+## ⚖️ Conclusão
+
+Após a implementação e comparação dos modelos relacional e de grafos para representar a rede social acadêmica, foi possível observar que ambos conseguem armazenar os dados e realizar as consultas propostas. Entretanto, cada modelo apresenta características que o tornam mais adequado para determinadas situações.
+
+O modelo relacional, implementado no PostgreSQL, organiza as informações em tabelas e utiliza chaves primárias e estrangeiras para estabelecer relacionamentos entre os dados. Essa estrutura oferece boa organização, integridade e consistência das informações. As consultas de amizades e de menor caminho também puderam ser reproduzidas utilizando comandos SQL, incluindo junções e consultas recursivas. Porém, operações que envolvem percorrer diversas conexões podem exigir consultas mais complexas.
+
+Já o modelo de grafos, implementado no ArangoDB, representa diretamente os alunos como vértices e suas amizades como arestas. Essa abordagem facilita a visualização e a exploração dos relacionamentos, tornando operações como encontrar amigos e identificar o menor caminho entre dois alunos mais naturais.
+
+Diante dos resultados, concluímos que **o modelo de grafos é o mais adequado para representar a rede social acadêmica**, principalmente porque o foco do sistema está nas conexões e interações entre os alunos. Isso não significa que o modelo relacional seja inadequado, mas que, para esse cenário específico, o modelo de grafos oferece uma representação mais intuitiva e prática dos relacionamentos.
